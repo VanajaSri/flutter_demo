@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/vechile_list_screen.dart';
+import 'package:flutter_demo/onboarding.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: VechileListScreen(),
+      home: Onboarding(),
       debugShowCheckedModeBanner: false,
     );
   }
