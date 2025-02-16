@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/vehicle.dart';
+import 'package:flutter_demo/constants/optimized_image_loader.dart';
+import 'package:flutter_demo/features/data/models/vehicle.dart';
 
 class VehicleDetails extends StatefulWidget {
   final Vehicle vehicle;
@@ -11,9 +12,9 @@ class VehicleDetails extends StatefulWidget {
 
 class _VehicleDetailsState extends State<VehicleDetails> {
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    
     final Size screenSize = MediaQuery.of(context).size;
     final double screenHeight = screenSize.height;
     final double screenWidth = screenSize.width;
@@ -27,7 +28,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new),
         ),
       ),
       body: SingleChildScrollView(
@@ -42,7 +43,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.05,
-                    ), 
+                    ),
                     child: PageView.builder(
                       scrollDirection: Axis.vertical,
                       itemCount: 3,
@@ -52,11 +53,11 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                           }),
                       itemBuilder:
                           (context, index) => ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              12,
-                            ), 
-                            child: Image.asset(
-                              widget.vehicle.image,
+                            borderRadius: BorderRadius.circular(12),
+                            child: OptimizedImageLoader(
+                              imagePath: widget.vehicle.image,
+                              width: screenWidth * 0.9,
+                              height: imageHeight,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -70,8 +71,8 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                     children: List.generate(
                       3,
                       (index) => AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        margin: EdgeInsets.only(bottom: 5),
+                        duration: const Duration(milliseconds: 200),
+                        margin: const EdgeInsets.only(bottom: 5),
                         width: screenWidth * 0.02,
                         height:
                             index == currentIndex
@@ -114,11 +115,12 @@ class _VehicleDetailsState extends State<VehicleDetails> {
               ),
             ),
             SizedBox(height: screenHeight * 0.03),
-              Container(
+            Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.08, 
-                vertical: screenHeight * 0.02,
+              padding: EdgeInsets.only(
+                left: screenWidth * 0.08,
+                right: screenWidth * 0.08,
+                top: screenHeight * 0.02,
               ),
               decoration: BoxDecoration(
                 color: Colors.black54,
@@ -162,9 +164,8 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        flex: 4, 
-                        child: 
-                        Column(
+                        flex: 4,
+                        child: Column(
                           children: [
                             Text(
                               'Vehicle Details',
@@ -175,9 +176,7 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                               ),
                             ),
                             Align(
-                              alignment:
-                                  Alignment
-                                      .center, 
+                              alignment: Alignment.center,
                               child: Text(
                                 widget.vehicle.name,
                                 style: TextStyle(
@@ -189,14 +188,14 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ),
-                      SizedBox(width: screenWidth * 0.02), 
+                      SizedBox(width: screenWidth * 0.02),
                       Flexible(
-                        flex: 6, 
+                        flex: 6,
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.08, 
+                            horizontal: screenWidth * 0.08,
                             vertical: screenHeight * 0.02,
                           ),
                           decoration: BoxDecoration(
@@ -208,12 +207,11 @@ class _VehicleDetailsState extends State<VehicleDetails> {
                           child: Text(
                             'Contact Dealer',
                             style: TextStyle(
-                              fontSize: screenWidth * 0.045, 
+                              fontSize: screenWidth * 0.045,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
-                            textAlign:
-                                TextAlign.center, 
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
@@ -237,18 +235,14 @@ class _VehicleDetailsState extends State<VehicleDetails> {
   ) {
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
-      mainAxisSize: MainAxisSize.min, 
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          size: screenSize.width * 0.08, 
-          color: Colors.white,
-        ),
+        Icon(icon, size: screenSize.width * 0.08, color: Colors.white),
         SizedBox(height: screenSize.height * 0.005),
         Text(
           name,
           style: TextStyle(
-            fontSize: screenSize.width * 0.035, 
+            fontSize: screenSize.width * 0.035,
             fontWeight: FontWeight.w800,
             color: Colors.white,
           ),
@@ -257,11 +251,11 @@ class _VehicleDetailsState extends State<VehicleDetails> {
         Text(
           value,
           style: TextStyle(
-            fontSize: screenSize.width * 0.03, 
+            fontSize: screenSize.width * 0.03,
             color: Colors.grey.shade200,
           ),
           textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis, 
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

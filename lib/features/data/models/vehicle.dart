@@ -5,6 +5,8 @@ class Vehicle {
   final String model;
   final String image;
   final int capacity; 
+  final double imageWidth;
+  final double imageHeight;
 
   Vehicle({
     required this.name,
@@ -13,6 +15,8 @@ class Vehicle {
     required this.model,
     required this.image,
     required this.capacity,
+    this.imageWidth = 300,
+    this.imageHeight = 200,
   });
 }
 

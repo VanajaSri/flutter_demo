@@ -1,6 +1,11 @@
+
+// ignore_for_file: deprecated_member_use
+
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo/car_detail_screen.dart';
-import 'package:flutter_demo/vehicle.dart';
+import 'package:flutter_demo/features/presentation/screens/vehicle_details.dart';
+import 'package:flutter_demo/constants/optimized_image_loader.dart';
+import 'package:flutter_demo/features/data/models/vehicle.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,12 +36,63 @@ class _HomeScreenState extends State<HomeScreen> {
     return "Less Efficient & High Pollutant";
   }
 
+  Future<bool> _onBackPressed() async {
+    bool exitApp = await showModalBottomSheet<bool>(
+          context: context,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Are you sure you want to exit?",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          SystemNavigator.pop(); 
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("Yes, Exit"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context, false); 
+                        },
+                        child: const Text("No"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ) ??
+        false; 
+
+    return exitApp;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xffececee),
-      appBar: headerParts(),
-      body: carList(context),
+    return WillPopScope(
+      onWillPop: _onBackPressed, 
+      child: Scaffold(
+        backgroundColor: const Color(0xffececee),
+        appBar: headerParts(),
+        body: carList(context),
+      ),
     );
   }
 
@@ -45,12 +101,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           MasonryGridView(
-            padding: EdgeInsets.symmetric(horizontal: 22),
+            padding: const EdgeInsets.symmetric(horizontal: 22),
             crossAxisSpacing: 25,
             mainAxisSpacing: 25,
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
             ),
             children: [
@@ -69,31 +125,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(22),
                     ),
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Stack(
                           children: [
-                            Center(child: Image.asset(vehicle.image)),
+                            Center(
+                              child: OptimizedImageLoader(
+                                imagePath: vehicle.image,
+                                width: vehicle.imageWidth,
+                                height: vehicle.imageHeight,
+                              ),
+                            ),
                             Positioned(
                               top: 0,
                               right: 0,
                               child: Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: 10,
                                   vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
-                                  color:
-                                      getVehicleCondition(
-                                        vehicle,
-                                      ).values.first,
+                                  color: getVehicleCondition(vehicle).values.first,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   getVehicleCondition(vehicle).keys.first,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -103,34 +162,34 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 7),
+                        const SizedBox(height: 7),
                         Text(
                           vehicle.name,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           "Model: ${vehicle.model}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
                           "${vehicle.fuelEfficiency} km/l",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         Text(
                           getEfficiencyStatus(vehicle),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -148,13 +207,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar headerParts() {
     return AppBar(
-      backgroundColor: Color(0xffececee),
+      backgroundColor: const Color(0xffececee),
       leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.arrow_back_ios_new),
+        onPressed: () {
+          _onBackPressed(); 
+        },
+        icon: const Icon(Icons.arrow_back_ios_new),
       ),
       centerTitle: true,
-      title: Text(
+      title: const Text(
         'Car model shop',
         style: TextStyle(
           color: Colors.black54,
